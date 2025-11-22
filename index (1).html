@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart-Themed Music Player</title>
+    <style>
+        /* CSS for Styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Georgia', serif; /* A bit more romantic font */
+            background-color: #ffeef2; /* Light pink background */
+            color: #4a001a; /* Darker red for text */
+            text-align: center;
+        }
+
+        h1 {
+            color: #d11d61; /* Deep pink for heading */
+            margin-bottom: 30px; /* Slightly less margin to make space for credit */
+            font-size: 2.8em; /* Larger heading */
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #music-photo-container {
+            width: 550px; 
+            height: 550px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(209, 29, 97, 0.4);
+            cursor: pointer;
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+            border: 5px solid transparent; /* Initial transparent border */
+            display: flex; /* Use flex to center the image inside */
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Hide any overflow if the image is too big for 'contain' */
+        }
+
+        #music-photo-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 25px 50px rgba(209, 29, 97, 0.6);
+        }
+
+        #music-photo-container.playing {
+            border-color: #ff69b4; /* Hot pink border when playing */
+            animation: pulse-heart 1.2s infinite alternate ease-in-out;
+        }
+
+        #music-photo {
+            /* Ensures the entire image (face) is visible */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* KEY CHANGE: This makes sure the whole image fits */
+            border-radius: 25px; /* Slightly less border radius than container for inner image */
+        }
+
+        #status {
+            margin-top: 30px; /* Adjusted margin */
+            font-size: 1.5em; /* Larger status text */
+            font-weight: bold;
+            min-height: 30px; 
+            color: #d11d61; /* Deep pink for status */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* NEW: Style for the credit line */
+        #credit {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #8c0032; /* A darker shade of pink/red */
+            font-style: italic;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+        }
+
+        /* Keyframe animation for pulse effect, now heart-themed */
+        @keyframes pulse-heart {
+            from {
+                box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7); /* Hot pink glow start */
+            }
+            to {
+                box-shadow: 0 0 0 30px rgba(255, 105, 180, 0); /* Hot pink glow fade out */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>💖 My Heartfelt Music Player 💖</h1>
+
+    <div id="music-photo-container">
+        <img 
+            id="music-photo" 
+            src="/1763825735926.jpg" 
+            alt="Heartfelt Album Art"
+        >
+    </div>
+
+    <audio 
+        id="music-audio" 
+        src="/o.mp3" 
+        loop
+    ></audio>
+
+    <div id="status">Tap the lovely image to play some music!</div>
+
+    <div id="credit">Represent by Anshu Sharyar</div>
+
+    <script>
+        // JavaScript for Functionality
+
+        // Get the elements
+        const photoContainer = document.getElementById('music-photo-container'); // Changed to container
+        const audio = document.getElementById('music-audio');
+        const statusDisplay = document.getElementById('status');
+
+        let isPlaying = false;
+
+        function togglePlay() {
+            if (isPlaying) {
+                // Pause the music
+                audio.pause();
+                isPlaying = false;
+                photoContainer.classList.remove('playing'); // Apply class to container
+                statusDisplay.textContent = "Music Paused... Missing you already! 💔";
+            } else {
+                // Play the music
+                audio.play()
+                    .then(() => {
+                        isPlaying = true;
+                        photoContainer.classList.add('playing'); // Apply class to container
+                        statusDisplay.textContent = "Music is Playing! Enjoy this melody! 🥰";
+                    })
+                    .catch(error => {
+                        console.error("Playback failed:", error);
+                        statusDisplay.textContent = "Oops! Couldn't play the music. Is your heart ready?";
+                    });
+            }
+        }
+
+        // Add the click listener to the photo container
+        photoContainer.addEventListener('click', togglePlay); // Event listener on container
+
+        // Optional: Reset status when the song finishes (if loop is removed)
+        audio.onended = () => {
+            isPlaying = false;
+            photoContainer.classList.remove('playing');
+            statusDisplay.textContent = "The song has ended. Tap to feel the love again! ❤️";
+        };
+    </script>
+</body>
+</html>
